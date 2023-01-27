@@ -1,0 +1,22 @@
+---
+- name: "Configure monitoring stack"
+  gather_facts: yes
+  hosts: monitoring
+  vars_files:
+    - group_vars/all.yaml
+  tasks:
+    - assert:
+        that:
+        - "ansible_distribution == 'Ubuntu'"
+        fail_msg: "This playbook contains apt specific tasks that will not work on non-Ubuntu systems"
+    - import_tasks: tasks/install-docker/main.yaml
+      tags:
+      - base
+
+  handlers:
+  - name: "restart-docker"
+    service:
+      name: docker
+      state: restarted
+      enabled: yes
+    ignore_errors: "{{ ansible_check_mode }}"

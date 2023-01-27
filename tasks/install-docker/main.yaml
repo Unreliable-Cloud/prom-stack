@@ -1,0 +1,2 @@
+- import_tasks: tasks/base.yaml
+- import_tasks: tasks/docker.yaml
