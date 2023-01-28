@@ -3,7 +3,7 @@
   file:
     state: directory
     recurse: no
-    path: "{{ docker.user }}/{{ compose.compose_basedir }}"
+    path: "{{ homedir }}/{{ compose.compose_basedir }}"
     owner: "{{ docker.user }}"
     group: "{{ docker.user }}"
     mode: 0755
@@ -12,7 +12,7 @@
   file:
     state: directory
     recurse: no
-    path: "{{ docker.user }}/{{ compose.compose_basedir }}/{{ item }}"
+    path: "{{ homedir }}/{{ compose.compose_basedir }}/{{ item }}"
     owner: "{{ docker.user }}"
     group: "{{ docker.user }}"
     mode: 0755
