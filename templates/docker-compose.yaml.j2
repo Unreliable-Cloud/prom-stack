@@ -17,7 +17,6 @@ services:
 {% if container.networks is defined %}
     networks: {{ container.networks }}
 {% endif %}
-{% endif %}
 {% if container.environment is defined %}
     environment:
     {% for k, v in container.environment.items() %}
