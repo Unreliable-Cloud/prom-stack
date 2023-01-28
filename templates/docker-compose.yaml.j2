@@ -1,7 +1,7 @@
 ---
 version: "{{ compose['compose_file']['composeVersion'] }}"
-{% for container in compose['containers'] %}
 services:
+{% for container in compose['containers'] %}
   {{ container.name }}:
     image: {{ container.image }}
     container_name: {{ container.name }}
