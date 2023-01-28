@@ -21,6 +21,8 @@ compose:
   compose_file_dirs:
   - prometheus
   - prometheus/config
+  - alertmanager
+  - alertmanager/config
   compose_file:
     composeVersion: "3.7"
     restartPolicy: unless-stopped

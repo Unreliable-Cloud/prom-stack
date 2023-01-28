@@ -17,6 +17,16 @@
   with_items:
   - { src: 'prometheus.yaml.j2', dest: 'prometheus.yml' }
 
+- name: "Copy Alertmanager config"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/alertmanager/config/{{ item.dest }}"
+    owner: "{{ docker.user }}"
+    group: "{{ docker.user }}"
+    mode: 0600
+  with_items:
+  - { src: 'alertmanager.yml', dest: 'alertmanager.yml' }
+
 - name: "Copy Kubernetes certificate files"
   copy:
     src: "{{ item.src }}"
