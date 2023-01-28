@@ -11,7 +11,7 @@ services:
 {% endif %}
 {% if container.command is defined %}
     command:
-    {{ container.command }}
+    {{ container.command | list }}
 {% endif %}
 {% if container.ports is defined %}
     ports:
