@@ -1,4 +1,13 @@
 ---
+- name: "Ensure {{ docker.user }}"
+  user:
+    name: "{{ docker.user }}"
+    state: present
+  register: ensure_user
+
+- set_fact:
+    homedir: "{{ ensure_user.home }}"
+
 - name: "Create compose basedir"
   file:
     state: directory
