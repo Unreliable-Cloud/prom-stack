@@ -372,7 +372,7 @@ scrape_configs:
     scrape_timeout: 30s
     hetzner_sd_configs:
     - authorization:
-        credentials: "SEdqkRKVbHmzfRBvtcBoiky4ZAGsDI5xhviu494D362H6LmA2AAOGWc4vOXzlKRo"
+        credentials: "{{ hcloud_token }}"
       role: "hcloud"
     relabel_configs:
     - source_labels: [__meta_hetzner_public_ipv4]
