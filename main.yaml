@@ -12,6 +12,9 @@
     - import_tasks: tasks/install-docker/main.yaml
       tags:
       - base
+    - import_tasks: tasks/configure-docker-compose/main.yaml
+      tags:
+      - configure
 
   handlers:
   - name: "restart-docker"

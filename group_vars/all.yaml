@@ -15,3 +15,13 @@ docker:
   - lsb-release
   - apt-utils
 
+compose:
+  setup_compose: true
+  compose_basedir: docker
+  compose_file_dirs:
+  - prometheus
+  - prometheus/config
+  compose_file:
+    composeVersion: "3.7"
+    restartPolicy: unless-stopped
+    services: {}

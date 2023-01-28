@@ -1,0 +1,12 @@
+{{ define "cluster" }}{{ .ExternalURL | reReplaceAll ".*alertmanager\\.(.*)" "$1" }}{{ end }}
+{{ define "slack.alert" }}
+{{- $root := . -}}
+{{ range .Alerts }}
+  *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
+  *Description:* {{ .Annotations.description }}
+  *Grafana URL:* https://grafana.donthurt.us:3000/alerting/list?view=state
+  *Details:*
+    {{ range .Labels.SortedPairs }} - *{{ .Name }}:* `{{ .Value }}`
+    {{ end }}
+{{ end }}
+{{ end }}

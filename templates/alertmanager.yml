@@ -1,0 +1,31 @@
+global:
+  resolve_timeout: 5m
+templates:
+- '/etc/prometheus/alertmanager_templates/*.tmpl'
+inhibit_rules:
+  - source_matchers:
+      - 'alertname = InfoInhibitor'
+    target_matchers:
+      - 'severity = info'
+    equal:
+      - 'namespace'
+  - source_matchers: [severity="critical"]
+    target_matchers: [severity="warning"]
+    equal: ['alertname', 'cluster', 'service']
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 12h
+  receiver: 'slack'
+  routes:
+  - receiver: slack
+    matchers:
+    - severity=~"critical|warning"
+receivers:
+- name: 'slack'
+  slack_configs:
+  - api_url: https://hooks.slack.com/services/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
+    channel: '#cicd-alerting'
+    text: '{{ template "slack.alert" . }}'
+    send_resolved: true

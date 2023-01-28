@@ -1,0 +1,81 @@
+---
+version: '3.7'
+services:
+  prometheus:
+    image: docker.io/prom/prometheus:v2.41.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus/configs/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=90d'
+      - '--web.enable-admin-api'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "0.0.0.0:9090:9090"
+    networks:
+      - monitoring
+    depends_on:
+      - cadvisor
+    restart: unless-stopped
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/kmsg:/dev/kmsg:ro
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - monitoring
+    restart: unless-stopped
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /:/host:ro,rslave
+    command:
+      - '--path.rootfs=/host'
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    ports:
+      - "127.0.0.1:9100:9100"
+    networks:
+      - monitoring
+    restart: unless-stopped
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager/config:/etc/alertmanager/
+      - alertmanager:/alertmanager
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+networks:
+  monitoring:
+    name: monitoring
+    driver: bridge
+
+volumes:
+    prometheus_data: {}
+    grafana: {}
+    loki: {}
+    alertmanager: {}

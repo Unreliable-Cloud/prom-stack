@@ -1,0 +1,50 @@
+---
+- name: "Copy Docker compose file"
+  template:
+    src: docker-compose.yaml.j2
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/prometheus/docker-compose.yaml"
+    owner: "{{ docker.user }}"
+    group: "{{ docker.user }}"
+    mode: 0600
+
+- name: "Copy Prometheus config"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/prometheus/config/{{ item.dest }}"
+    owner: "{{ docker.user }}"
+    group: "{{ docker.user }}"
+    mode: 0600
+  with_items:
+  - { src: 'prometheus.yaml.j2', dest: 'prometheus.yml' }
+
+- name: "Copy Kubernetes certificate files"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/prometheus/config/{{ item.dest }}"
+    owner: "{{ docker.user }}"
+    group: "{{ docker.user }}"
+    mode: 0600
+  with_items:
+  - { src: 'certs/k0s-kubernetes-ca.crt', dest: 'k0s-kubernetes-ca.crt'}
+  - { src: 'certs/k0s-kubernetes.crt', dest: 'k0s-kubernetes.crt'}
+  - { src: 'certs/k0s-kubernetes.key', dest: 'k0s-kubernetes.key'}
+  - { src: 'certs/k8s-kubernetes-ca.crt', dest: 'k8s-kubernetes-ca.crt'}
+  - { src: 'certs/k8s-kubernetes.crt', dest: 'k8s-kubernetes.crt'}
+  - { src: 'certs/k8s-kubernetes.key', dest: 'k8s-kubernetes.key'}
+
+- name: "Install pip3"
+  package:
+    name: python3-pip
+    state: latest
+
+- name: "Install Python Docker SDK"
+  pip:
+    name:
+    - docker
+    - docker-compose
+
+- name: "Start containers"
+  community.docker.docker_compose:
+    project_src: "{{ homedir }}/{{ compose.compose_basedir }}/prometheus"
+    build: no
+    pull: yes

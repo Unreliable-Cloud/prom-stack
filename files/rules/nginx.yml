@@ -1,0 +1,27 @@
+groups:
+- name: ingress-controllers
+  rules:
+  - alert: NGINXConfigFailed
+    expr: count(nginx_ingress_controller_config_last_reload_successful == 0) > 0
+    for: 1s
+    labels:
+      severity: critical
+      component: ingress
+    annotations:
+      summary: Revert the latest ingress changes to allow config reloads to resume
+      description: |
+        Bad ingress config - nginx config test failed
+        VALUE = {{ $value }}
+        LABELS = {{ $labels }}
+  - alert: NGINXTooMany500s
+    expr: 100 * ( sum( nginx_ingress_controller_requests{status=~"5.+"} ) / sum(nginx_ingress_controller_requests) ) > 5
+    for: 1m
+    labels:
+      severity: warning
+      component: ingress
+    annotations:
+      summary: More than 5% of all requests returned 5XX, this requires your attention
+      description: |
+        Too many 5XXs for {{ $labels.job }} {{ $labels.service }}
+        VALUE = {{ $value }}
+        LABELS = {{ $labels }}
