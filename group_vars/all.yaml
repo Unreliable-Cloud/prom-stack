@@ -15,6 +15,7 @@ docker:
   - lsb-release
   - apt-utils
 
+# Docker compose setup
 compose:
   setup_compose: true
   compose_basedir: docker
@@ -26,6 +27,7 @@ compose:
   compose_file:
     composeVersion: "3.7"
     restartPolicy: unless-stopped
+  # Docker compose container definitions
   containers:
   - name: prometheus
     image: docker.io/prom/prometheus:v2.41.0
@@ -90,3 +92,38 @@ compose:
       - alertmanager:/alertmanager
     networks:
       - monitoring
+
+## Monitoring agent configuration ##
+# Variables for node-exporter and cadvisor
+node_exporter_jobs:
+- name: node-exporter
+  targets:
+  - node-exporter:9100
+  - 192.168.1.29:9100
+  - 192.168.1.51:9100
+  - 192.168.1.75:9100
+- name: cadvisor
+  targets:
+  - 192.168.1.29:8080
+  - 192.168.1.75:8080
+  - dns1.donthurt.us:8080
+  - cadvisor:8080
+
+# Variables for prometheus k8s scraping
+kubernetes_node_exporter_jobs:
+- name: k0s-rpi
+  api_server: '192.168.1.61:6443'
+  cert_prefix: k0s
+  cluster_name: k0s-rpi
+- name: k8s-us-east-1
+  api_server: '5.161.160.176:443'
+  cert_prefix: k8s
+  cluster_name: k8s-us-east-1
+
+# Global Prometheus config
+prometheus_config:
+  global:
+    scrape_interval: 10s
+    evaluation_interval: 10s
+    external_labels:
+      env: prod
