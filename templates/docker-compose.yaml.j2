@@ -17,16 +17,16 @@ services:
 {% if container.networks is defined %}
     networks: {{ container.networks }}
 {% endif %}
-{% if container.environment is defined %}
-    environment:
-  {% for k, v in container.environment.items() %}
-    {{ k }}: {{ v }}
-  {% endfor %}
-{% endif %}
 {% if container.depends_on is defined %}
     depends_on: {{ container.depends_on }}
 {% endif %}
     restart: {{ compose['compose_file']['restartPolicy'] }}
+{% if container.environment is defined %}
+    environment:
+{% for k, v in container.environment.items() %}
+      {{ k }}: {{ v }}
+{% endfor %}
+{% endif %}
 {% endfor %}
 
 networks:
