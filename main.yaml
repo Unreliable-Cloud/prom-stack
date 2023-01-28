@@ -13,7 +13,7 @@
     - import_tasks: tasks/install-docker/main.yaml
       tags:
       - base
-    - import_tasks: tasks/configure-docker-compose/main.yaml
+    - import_tasks: tasks/configure-prom-stack/main.yaml
       tags:
       - configure
 

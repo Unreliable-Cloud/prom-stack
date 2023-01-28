@@ -1,0 +1,6 @@
+---
+- name: "Setup DuckDNS cronjob"
+  cron:
+    name: "Update DuckDNS DNS record"
+    minute: "*/5"
+    job: 'echo url="https://www.duckdns.org/update?domains=loki-push&token={{ duck_token }}&ip=" | curl -k -o /var/log/duckdns.log -K -'
