@@ -90,7 +90,7 @@ compose:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
     ports:
-      - "127.0.0.1:9093:9093"
+      - "0.0.0.0:9093:9093"
     volumes:
       - ./alertmanager/config:/etc/alertmanager/
       - alertmanager:/alertmanager
