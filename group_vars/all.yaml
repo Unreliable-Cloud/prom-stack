@@ -151,6 +151,7 @@ prometheus_config:
     external_labels:
       env: prod
 log_index_retention: 744h
+alertmanager_url: alertmanager
 
 # Global Loki config
 loki_config:
