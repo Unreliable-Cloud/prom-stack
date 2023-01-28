@@ -24,6 +24,8 @@ compose:
   - loki
   - promtail
   - alertmanager
+  - grafana
+  - grafana/config
   - loki/config
   - promtail/config
   - prometheus/config
