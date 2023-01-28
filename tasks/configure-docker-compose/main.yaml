@@ -1,2 +1,7 @@
-- import_tasks: base.yaml
-- import_tasks: configure.yaml
+- name: Base
+  ansible.builtin.include_tasks:
+    file: base.yaml
+
+- name: Configure
+  ansible.builtin.include_tasks:
+    file: configure.yaml
