@@ -21,13 +21,15 @@ compose:
   compose_basedir: docker
   compose_file_dirs:
   - prometheus
-  - prometheus/config
-  - alertmanager
-  - alertmanager/config
   - loki
-  - loki/config
   - promtail
+  - alertmanager
+  - loki/config
   - promtail/config
+  - prometheus/config
+  - prometheus/config/rules
+  - alertmanager/config
+  - alertmanager/config/alertmanager_templates
   compose_file:
     composeVersion: "3.7"
     restartPolicy: unless-stopped
