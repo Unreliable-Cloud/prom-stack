@@ -26,6 +26,8 @@ compose:
   - alertmanager/config
   - loki
   - loki/config
+  - promtail
+  - promtail/config
   compose_file:
     composeVersion: "3.7"
     restartPolicy: unless-stopped
