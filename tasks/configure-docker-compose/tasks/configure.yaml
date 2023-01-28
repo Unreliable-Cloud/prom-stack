@@ -84,6 +84,16 @@
   with_items:
   - { src: 'alertmanager_templates/slack.tmpl', dest: 'slack.tmpl'}
 
+- name: "Configure Grafana"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/grafana/config/{{ item.dest }}"
+    owner: "{{ docker.user }}"
+    group: "{{ docker.user }}"
+    mode: 0644
+  with_items:
+  - { src: 'grafana.ini.j2', dest: 'grafana.ini' }
+
 - name: "Install pip3"
   package:
     name: python3-pip

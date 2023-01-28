@@ -17,6 +17,13 @@ services:
 {% if container.networks is defined %}
     networks: {{ container.networks }}
 {% endif %}
+{% endif %}
+{% if container.environment is defined %}
+    environment:
+    {% for k, v in container.environment.items() %}
+      {{ k }}: {{ v }}
+    {% endfor %}
+{% endif %}
 {% if container.depends_on is defined %}
     depends_on: {{ container.depends_on }}
 {% endif %}
@@ -32,3 +39,4 @@ volumes:
     prometheus_data: {}
     alertmanager: {}
     loki: {}
+    grafana: {}

@@ -39,84 +39,96 @@ compose:
     image: docker.io/prom/prometheus:v2.41.0
     container_name: prometheus
     volumes:
-      - ./prometheus/config/:/etc/prometheus/
-      - prometheus_data:/prometheus
+    - ./prometheus/config/:/etc/prometheus/
+    - prometheus_data:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention.time=90d'
-      - '--web.enable-admin-api'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
+    - '--config.file=/etc/prometheus/prometheus.yml'
+    - '--storage.tsdb.path=/prometheus'
+    - '--storage.tsdb.retention.time=90d'
+    - '--web.enable-admin-api'
+    - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+    - '--web.console.templates=/usr/share/prometheus/consoles'
     ports:
-      - "0.0.0.0:9090:9090"
+    - "0.0.0.0:9090:9090"
     networks:
-      - monitoring
+    - monitoring
     depends_on:
-      - cadvisor
+    - cadvisor
   - name: cadvisor
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/kmsg:/dev/kmsg:ro
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    - /dev/kmsg:/dev/kmsg:ro
     ports:
-      - "127.0.0.1:8080:8080"
+    - "127.0.0.1:8080:8080"
     networks:
-      - monitoring
+    - monitoring
   - name: node-exporter
     image: quay.io/prometheus/node-exporter:latest
     container_name: node-exporter
     volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-      - /:/host:ro,rslave
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /:/rootfs:ro
+    - /:/host:ro,rslave
     command:
-      - '--path.rootfs=/host'
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - --collector.filesystem.ignored-mount-points
-      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    - '--path.rootfs=/host'
+    - '--path.procfs=/host/proc'
+    - '--path.sysfs=/host/sys'
+    - --collector.filesystem.ignored-mount-points
+    - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
     ports:
-      - "127.0.0.1:9100:9100"
+    - "127.0.0.1:9100:9100"
     networks:
-      - monitoring
+    - monitoring
   - name: alertmanager
     image: docker.io/prom/alertmanager:v0.25.0
     container_name: alertmanager
     command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/alertmanager'
+    - '--config.file=/etc/alertmanager/alertmanager.yml'
+    - '--storage.path=/alertmanager'
     ports:
-      - "0.0.0.0:9093:9093"
+    - "0.0.0.0:9093:9093"
     volumes:
-      - ./alertmanager/config:/etc/alertmanager/
-      - alertmanager:/alertmanager
+    - ./alertmanager/config:/etc/alertmanager/
+    - alertmanager:/alertmanager
     networks:
-      - monitoring
+    - monitoring
   - name: loki
     image: docker.io/grafana/loki:2.7.1
     ports:
-      - "0.0.0.0:3100:3100"
+    - "0.0.0.0:3100:3100"
     volumes:
-      - ./loki/config:/etc/loki/
-      - loki:/loki
+    - ./loki/config:/etc/loki/
+    - loki:/loki
     command:
-      - '-config.file=/etc/loki/loki.yml'
+    - '-config.file=/etc/loki/loki.yml'
     networks:
-      - monitoring
+    - monitoring
   - name: promtail
     image: docker.io/grafana/promtail:2.7.2
     volumes:
-      - ./promtail/config:/etc/promtail/
-      - /var/log:/var/log:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+    - ./promtail/config:/etc/promtail/
+    - /var/log:/var/log:ro
+    - /var/run/docker.sock:/var/run/docker.sock
     command:
-      - '-config.file=/etc/promtail/promtail.yml'
+    - '-config.file=/etc/promtail/promtail.yml'
+    networks:
+    - monitoring
+  - name: grafana
+    image: docker.io/grafana/grafana:9.3.6-ubuntu
+    volumes:
+    - grafana:/var/lib/grafana
+    - ./grafana/config:/etc/grafana
+    environment:
+      GF_INSTALL_PLUGINS: "grafana-piechart-panel"
+      GF_LOG_MODE: console
+    ports:
+    - "0.0.0.0:3000:3000"
     networks:
       - monitoring
 
@@ -165,3 +177,15 @@ loki_config:
 # Global Promtail config
 promtail_config:
   max_log_age: 48h
+
+# Global Grafana config
+grafana_config:
+  app_mode: production
+  server:
+    protocol: http
+    logging: enabled
+    gzip: enabled
+  database:
+    type: sqlite3
+  admin:
+    username: admin
