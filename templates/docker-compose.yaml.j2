@@ -6,24 +6,19 @@ services:
     image: {{ container.image }}
     container_name: {{ container.name }}
 {% if container.volumes is defined %}
-    volumes:
-    {{ container.volumes }}
+    volumes: {{ container.volumes }}
 {% endif %}
 {% if container.command is defined %}
-    command:
-    {{ container.command | list }}
+    command: {{ container.command }}
 {% endif %}
 {% if container.ports is defined %}
-    ports:
-    {{ container.ports }}
+    ports: {{ container.ports }}
 {% endif %}
 {% if container.networks is defined %}
-    networks:
-    {{ container.networks }}
+    networks: {{ container.networks }}
 {% endif %}
 {% if container.depends_on is defined %}
-    depends_on:
-    {{ container.depends_on }}
+    depends_on: {{ container.depends_on }}
 {% endif %}
     restart: {{ compose['compose_file']['restartPolicy'] }}
 {% endfor %}
