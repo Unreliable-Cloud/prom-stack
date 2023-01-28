@@ -1,5 +1,5 @@
 ---
-version: "{{ compose['compose_file']['compose_version'] }}"
+version: "{{ compose['compose_file']['composeVersion'] }}"
 {% for container in compose['containers'] %}
 services:
   {{ container.name }}:
