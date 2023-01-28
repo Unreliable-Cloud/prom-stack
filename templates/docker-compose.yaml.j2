@@ -5,7 +5,7 @@ services:
     image: docker.io/prom/prometheus:v2.41.0
     container_name: prometheus
     volumes:
-      - ./prometheus/configs/:/etc/prometheus/
+      - ./prometheus/config/:/etc/prometheus/
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
