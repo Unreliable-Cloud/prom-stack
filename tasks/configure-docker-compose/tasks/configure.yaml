@@ -17,6 +17,26 @@
   with_items:
   - { src: 'prometheus.yaml.j2', dest: 'prometheus.yml' }
 
+- name: "Copy Loki config"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/loki/config/{{ item.dest }}"
+    owner: "{{ docker.user }}"
+    group: "{{ docker.user }}"
+    mode: 0644
+  with_items:
+  - { src: 'loki.yaml.j2', dest: 'loki.yml' }
+
+- name: "Copy Promtail config"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/promtail/config/{{ item.dest }}"
+    owner: "{{ docker.user }}"
+    group: "{{ docker.user }}"
+    mode: 0644
+  with_items:
+  - { src: 'promtail.yaml.j2', dest: 'promtail.yml' }
+
 - name: "Copy Alertmanager config"
   copy:
     src: "{{ item.src }}"

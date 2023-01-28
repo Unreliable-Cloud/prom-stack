@@ -24,6 +24,8 @@ compose:
   - prometheus/config
   - alertmanager
   - alertmanager/config
+  - loki
+  - loki/config
   compose_file:
     composeVersion: "3.7"
     restartPolicy: unless-stopped
@@ -86,10 +88,31 @@ compose:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
     ports:
-      - "9093:9093"
+      - "127.0.0.1:9093:9093"
     volumes:
       - ./alertmanager/config:/etc/alertmanager/
       - alertmanager:/alertmanager
+    networks:
+      - monitoring
+  - name: loki
+    image: docker.io/grafana/loki:2.7.1
+    ports:
+      - "0.0.0.0:3100:3100"
+    volumes:
+      - ./loki/config:/etc/loki/
+      - loki:/loki
+    command:
+      - '-config.file=/etc/loki/loki.yml'
+    networks:
+      - monitoring
+  - name: promtail
+    image: docker.io/grafana/promtail:2.7.2
+    volumes:
+      - ./promtail/config:/etc/promtail/
+      - /var/log:/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - '-config.file=/etc/promtail/promtail.yml'
     networks:
       - monitoring
 
@@ -127,3 +150,13 @@ prometheus_config:
     evaluation_interval: 10s
     external_labels:
       env: prod
+log_index_retention: 744h
+
+# Global Loki config
+loki_config:
+  object_storage: s3
+  datadir: '/loki'
+
+# Global Promtail config
+promtail_config:
+  max_log_age: 48h
