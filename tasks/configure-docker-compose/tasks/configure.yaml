@@ -70,9 +70,9 @@
     group: "{{ docker.user }}"
     mode: 0644
   with_items:
-  - { src: 'rules/certificates.yaml', dest: 'certificates.yml'}
-  - { src: 'rules/nginx.yaml', dest: 'nginx.yml'}
-  - { src: 'rules/promtail.yaml', dest: 'promtail.yml'}
+  - { src: 'rules/certificates.yml', dest: 'certificates.yml'}
+  - { src: 'rules/nginx.yml', dest: 'nginx.yml'}
+  - { src: 'rules/promtail.yml', dest: 'promtail.yml'}
 
 - name: "Copy Alertmanager templates"
   copy:
@@ -82,9 +82,7 @@
     group: "{{ docker.user }}"
     mode: 0644
   with_items:
-  - { src: 'rules/certificates.yaml', dest: 'certificates.yml'}
-  - { src: 'rules/nginx.yaml', dest: 'nginx.yml'}
-  - { src: 'rules/promtail.yaml', dest: 'promtail.yml'}
+  - { src: 'alertmanager_templates/slack.tmpl', dest: 'slack.tmpl'}
 
 - name: "Install pip3"
   package:
