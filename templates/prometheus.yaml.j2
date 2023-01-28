@@ -384,6 +384,6 @@ scrape_configs:
     metrics_path: '/metrics'
     basic_auth:
       username: metrics
-      password: "Zp8ydgal"
+      password: "{{ grafana_metrics_password }}"
     static_configs:
       - targets: ['grafana:3000']

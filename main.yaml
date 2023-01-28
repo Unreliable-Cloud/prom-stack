@@ -4,6 +4,7 @@
   hosts: monitoring
   vars_files:
     - group_vars/all.yaml
+    - vars/prometheus.yaml
   tasks:
     - assert:
         that:
