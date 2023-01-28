@@ -2,7 +2,7 @@
 - name: "Copy Docker compose file"
   template:
     src: docker-compose.yaml.j2
-    dest: "{{ homedir }}/{{ compose.compose_basedir }}/prometheus/docker-compose.yaml"
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/docker-compose.yaml"
     owner: "{{ docker.user }}"
     group: "{{ docker.user }}"
     mode: 0600
