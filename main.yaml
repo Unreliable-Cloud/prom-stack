@@ -24,3 +24,11 @@
       state: restarted
       enabled: yes
     ignore_errors: "{{ ansible_check_mode }}"
+
+  - name: "restart-containers"
+    community.docker.docker_compose:
+      project_src: "{{ homedir }}/{{ compose.compose_basedir }}"
+      build: no
+      state: restarted
+      pull: yes
+    ignore_errors: "{{ ansible_check_mode }}"

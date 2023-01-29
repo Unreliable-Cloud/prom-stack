@@ -107,6 +107,6 @@
 
 - name: "Start containers"
   community.docker.docker_compose:
-    project_src: "{{ homedir }}/{{ compose.compose_basedir }}/prometheus"
+    project_src: "{{ homedir }}/{{ compose.compose_basedir }}"
     build: no
     pull: yes
