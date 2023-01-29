@@ -19,6 +19,18 @@
   notify:
   - restart-containers
 
+- name: "Copy Nginx config"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/nginx/config/{{ item.dest }}"
+    owner: "{{ docker.user }}"
+    group: "{{ docker.user }}"
+    mode: 0644
+  with_items:
+  - { src: 'nginx-grafana.conf.j2', dest: 'nginx_grafana.conf' }
+  notify:
+  - restart-containers
+
 - name: "Copy Loki config"
   template:
     src: "{{ item.src }}"

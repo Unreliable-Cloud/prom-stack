@@ -33,6 +33,9 @@ networks:
   monitoring:
     name: monitoring
     driver: bridge
+  frontend:
+    name: frontend
+    driver: bridge
 
 volumes:
     prometheus_data: {}

@@ -26,8 +26,10 @@ compose:
   - promtail
   - alertmanager
   - grafana
+  - nginx
   - grafana/config
   - loki/config
+  - nginx/config
   - promtail/config
   - prometheus/config
   - prometheus/config/rules
@@ -134,6 +136,16 @@ compose:
     - "0.0.0.0:3000:3000"
     networks:
       - monitoring
+      - frontend
+  - name: nginx
+    image: docker.io/bitnami/nginx:1.23
+    ports:
+    - "0.0.0.0:80:8080"
+    volumes:
+    - ./nginx/config/nginx_grafana.conf:/opt/bitnami/nginx/conf/server_blocks/nginx_grafana.conf:ro
+    networks:
+      - monitoring
+      - frontend
 
 ## Monitoring agent configuration ##
 # Variables for node-exporter and cadvisor
@@ -192,3 +204,6 @@ grafana_config:
     type: sqlite3
   admin:
     username: admin
+
+# Nginx config
+grafana_hostname: 'grafana.donthurt.us'
