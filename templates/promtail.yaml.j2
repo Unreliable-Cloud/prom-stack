@@ -31,7 +31,7 @@ scrape_configs:
       target_label: 'container_ip'
   pipeline_stages:
   - static_labels:
-    job: docker
+      job: docker
 {% endif %}
 {% if promtail_journal is defined and promtail_journal == "enabled" %}
 - job_name: journal
