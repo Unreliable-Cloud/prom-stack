@@ -191,7 +191,7 @@ loki_config:
 
 # Global Promtail config
 promtail_config:
-  max_log_age: 48h
+  max_log_age: 12h
 
 # Global Grafana config
 grafana_config:
