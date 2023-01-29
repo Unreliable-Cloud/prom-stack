@@ -67,3 +67,8 @@ compactor:
   working_directory: {{ loki_config['datadir'] }}/compactor
   shared_store: s3
 {% endif %}
+
+frontend:
+  log_queries_longer_than: 5s
+  compress_responses: true
+  tail_proxy_url: http://loki:3100
