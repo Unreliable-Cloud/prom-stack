@@ -29,6 +29,7 @@ scrape_configs:
   pipeline_stages:
   - static_labels:
       job: docker
+      hostname: {{ ansible_hostname }}
 {% endif %}
 {% if promtail_journal is defined and promtail_journal == "enabled" %}
 - job_name: journal
