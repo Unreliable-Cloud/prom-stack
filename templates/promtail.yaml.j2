@@ -16,6 +16,8 @@ scrape_configs:
     labels:
       job: varlogs
       hostname: {{ ansible_hostname }}
+      env: prod
+      dc: msn
       __path__: /var/log/*log
 {% if promtail_docker is defined and promtail_docker == "enabled" %}
 - job_name: flog_scrape
@@ -30,6 +32,8 @@ scrape_configs:
   - static_labels:
       job: docker
       hostname: {{ ansible_hostname }}
+      env: prod
+      dc: msn
 {% endif %}
 {% if promtail_journal is defined and promtail_journal == "enabled" %}
 - job_name: journal
@@ -39,6 +43,8 @@ scrape_configs:
     labels:
       job: journal
       hostname: {{ ansible_hostname }}
+      env: prod
+      dc: msn
   relabel_configs:
     - source_labels: [__journal__systemd_unit]
       target_label: systemd_unit
