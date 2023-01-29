@@ -16,6 +16,8 @@
     mode: 0644
   with_items:
   - { src: 'prometheus.yaml.j2', dest: 'prometheus.yml' }
+  notify:
+  - restart-containers
 
 - name: "Copy Loki config"
   template:
@@ -26,6 +28,8 @@
     mode: 0644
   with_items:
   - { src: 'loki.yaml.j2', dest: 'loki.yml' }
+  notify:
+  - restart-containers
 
 - name: "Copy Promtail config"
   template:
@@ -36,6 +40,8 @@
     mode: 0644
   with_items:
   - { src: 'promtail.yaml.j2', dest: 'promtail.yml' }
+  notify:
+  - restart-containers
 
 - name: "Copy Alertmanager config"
   copy:
@@ -46,6 +52,8 @@
     mode: 0644
   with_items:
   - { src: 'alertmanager.yml', dest: 'alertmanager.yml' }
+  notify:
+  - restart-containers
 
 - name: "Copy Kubernetes certificate files"
   copy:
@@ -93,6 +101,8 @@
     mode: 0644
   with_items:
   - { src: 'grafana.ini.j2', dest: 'grafana.ini' }
+  notify:
+  - restart-containers
 
 - name: "Install pip3"
   package:
