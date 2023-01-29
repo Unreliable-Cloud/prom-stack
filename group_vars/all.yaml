@@ -206,4 +206,5 @@ grafana_config:
     username: admin
 
 # Nginx config
-grafana_hostname: 'grafana.donthurt.us'
+nginx_config:
+  grafana_hostname: 'grafana.donthurt.us'

@@ -1,6 +1,6 @@
 server {
     listen 0.0.0.0:8080;
-    server_name {{ grafana_hostname }};
+    server_name {{ nginx_config['grafana_hostname'] }};
     access_log /dev/stdout;
     error_log /dev/stderr;
 
