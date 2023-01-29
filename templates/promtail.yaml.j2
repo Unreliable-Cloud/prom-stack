@@ -19,6 +19,8 @@ scrape_configs:
       __path__: /var/log/*log
 {% if promtail_docker is defined and promtail_docker == "enabled" %}
 - job_name: flog_scrape
+  labels:
+    job: docker
   docker_sd_configs:
     - host: unix:///var/run/docker.sock
       refresh_interval: 5s
