@@ -29,6 +29,9 @@ scrape_configs:
     - source_labels: ['__meta_docker_network_ip']
       regex: '[0-9].*'
       target_label: 'container_ip'
+  pipeline_stages:
+  - static_labels:
+    job: docker
 {% endif %}
 {% if promtail_journal is defined and promtail_journal == "enabled" %}
 - job_name: journal
