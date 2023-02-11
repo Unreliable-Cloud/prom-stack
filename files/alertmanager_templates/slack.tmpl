@@ -2,9 +2,9 @@
 {{ define "slack.alert" }}
 {{- $root := . -}}
 {{ range .Alerts }}
-  *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
+  *Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
   *Description:* {{ .Annotations.description }}
-  *Grafana URL:* https://grafana.donthurt.us:3000/alerting/list?view=state
+  *Grafana URL:* http://grafana.donthurt.us/alerting/list?view=state
   *Details:*
     {{ range .Labels.SortedPairs }} - *{{ .Name }}:* `{{ .Value }}`
     {{ end }}

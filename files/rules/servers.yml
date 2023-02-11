@@ -1,0 +1,15 @@
+groups:
+- name: kubernetes
+  rules:
+  - alert: InstanceRebooted
+    expr: node_boot_time_seconds < 360
+    for: 1m
+    annotations:
+      title: 'Instance {{ $labels.instance }} has rebooted'
+      description: |
+       {{ $labels.instance }} of job {{ $labels.job }} has rebooted
+       VALUE = {{ $value }}
+       LABELS = {{ $labels }}
+    labels:
+      severity: warning
+      component: kubernetes

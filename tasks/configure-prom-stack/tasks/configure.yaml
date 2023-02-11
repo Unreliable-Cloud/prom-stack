@@ -93,6 +93,7 @@
   - { src: 'rules/certificates.yml', dest: 'certificates.yml'}
   - { src: 'rules/nginx.yml', dest: 'nginx.yml'}
   - { src: 'rules/promtail.yml', dest: 'promtail.yml'}
+  - { src: 'rules/servers.yml', dest: 'servers.yml'}
 
 - name: "Copy Alertmanager templates"
   copy:
