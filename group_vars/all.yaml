@@ -15,6 +15,7 @@ docker:
   - lsb-release
   - apt-utils
   - cron
+  - smartmontools
 
 # Docker compose setup
 compose:
@@ -41,7 +42,7 @@ compose:
   # Docker compose container definitions
   containers:
   - name: prometheus
-    image: docker.io/prom/prometheus:v2.41.0
+    image: docker.io/prom/prometheus:v2.42.0
     container_name: prometheus
     volumes:
     - ./prometheus/config/:/etc/prometheus/
@@ -105,7 +106,7 @@ compose:
     networks:
     - monitoring
   - name: loki
-    image: docker.io/grafana/loki:2.7.1
+    image: docker.io/grafana/loki:2.7.3
     ports:
     - "0.0.0.0:3100:3100"
     volumes:
@@ -116,7 +117,7 @@ compose:
     networks:
     - monitoring
   - name: promtail
-    image: docker.io/grafana/promtail:2.7.2
+    image: docker.io/grafana/promtail:2.7.3
     volumes:
     - ./promtail/config:/etc/promtail/
     - /var/log:/var/log:ro
