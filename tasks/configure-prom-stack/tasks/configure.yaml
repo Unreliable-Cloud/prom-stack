@@ -94,6 +94,8 @@
   - { src: 'rules/nginx.yml', dest: 'nginx.yml'}
   - { src: 'rules/promtail.yml', dest: 'promtail.yml'}
   - { src: 'rules/servers.yml', dest: 'servers.yml'}
+  notify:
+  - restart-containers
 
 - name: "Copy Alertmanager templates"
   copy:
@@ -104,6 +106,8 @@
     mode: 0644
   with_items:
   - { src: 'alertmanager_templates/slack.tmpl', dest: 'slack.tmpl'}
+  notify:
+  - restart-containers
 
 - name: "Configure Grafana"
   template:

@@ -7,6 +7,7 @@ groups:
     labels:
       severity: critical
       component: ingress
+      type: error
     annotations:
       summary: Revert the latest ingress changes to allow config reloads to resume
       description: |
@@ -19,6 +20,7 @@ groups:
     labels:
       severity: warning
       component: ingress
+      type: error
     annotations:
       summary: More than 5% of all requests returned 5XX, this requires your attention
       description: |

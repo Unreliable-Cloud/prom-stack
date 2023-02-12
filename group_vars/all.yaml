@@ -180,7 +180,8 @@ kubernetes_node_exporter_jobs:
 prometheus_config:
   global:
     scrape_interval: 10s
-    evaluation_interval: 10s
+    evaluation_interval: 30s
+    scrape_timeout: 10s
     external_labels:
       env: prod
       dc: msn

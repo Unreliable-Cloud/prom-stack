@@ -1,5 +1,6 @@
 global:
   scrape_interval: {{ prometheus_config['global']['scrape_interval'] }}
+  scrape_timeout: {{ prometheus_config['global']['scrape_timeout'] }}
   evaluation_interval: {{ prometheus_config['global']['evaluation_interval'] }}
 
 {% if prometheus_config['global']['external_labels'] is defined %}

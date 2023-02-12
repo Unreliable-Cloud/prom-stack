@@ -1,15 +1,16 @@
 groups:
-- name: kubernetes
+- name: all
   rules:
-  - alert: InstanceRebooted
-    expr: node_boot_time_seconds < 360
+  - alert: RebootRequired
+    expr: node_reboot_required == 1
     for: 1m
     annotations:
-      title: 'Instance {{ $labels.instance }} has rebooted'
+      title: 'Instance {{ $labels.instance }} needs to be rebooted'
       description: |
-       {{ $labels.instance }} of job {{ $labels.job }} has rebooted
+       {{ $labels.instance }} of job {{ $labels.job }} needs to be rebooted to finish applying updates
        VALUE = {{ $value }}
        LABELS = {{ $labels }}
     labels:
       severity: warning
-      component: kubernetes
+      component: updates
+      type: infrastructure
