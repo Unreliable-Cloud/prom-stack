@@ -94,6 +94,7 @@
   - { src: 'rules/nginx.yml', dest: 'nginx.yml'}
   - { src: 'rules/promtail.yml', dest: 'promtail.yml'}
   - { src: 'rules/servers.yml', dest: 'servers.yml'}
+  - { src: 'rules/minio.yml', dest: 'minio.yml'}
   notify:
   - restart-containers
 
