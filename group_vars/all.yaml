@@ -28,6 +28,8 @@ compose:
   - alertmanager
   - grafana
   - nginx
+  - minio
+  - minio/config
   - grafana/config
   - loki/config
   - nginx/config
@@ -116,6 +118,8 @@ compose:
     - '-config.file=/etc/loki/loki.yml'
     networks:
     - monitoring
+    depends_on:
+    - minio-nginx
   - name: promtail
     image: docker.io/grafana/promtail:2.7.3
     volumes:
@@ -148,6 +152,9 @@ compose:
     networks:
       - monitoring
       - frontend
+
+minio_config:
+  image: quay.io/minio/minio:RELEASE.2023-02-10T18-48-39Z
 
 ## Monitoring agent configuration ##
 # Variables for node-exporter and cadvisor
@@ -192,6 +199,8 @@ alertmanager_url: alertmanager
 loki_config:
   object_storage: s3
   datadir: '/loki'
+  endpoint: 'minio-nginx:9000'
+  region: us-east-1
 
 # Global Promtail config
 promtail_config:

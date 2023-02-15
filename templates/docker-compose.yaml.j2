@@ -1,5 +1,26 @@
 ---
 version: "{{ compose['compose_file']['composeVersion'] }}"
+
+x-minio-common: &minio-common
+  image: {{ minio_config['image'] }}
+  command: server --console-address ":9001" http://minio{1...4}/data{1...2}
+  expose:
+    - "9000"
+    - "9001"
+  environment:
+    MINIO_ROOT_USER: admin
+    MINIO_ROOT_PASSWORD: {{ minio_admin_password }}
+    MINIO_PROMETHEUS_URL: 'http://prometheus:9090/'
+    MINIO_PROMETHEUS_JOB_ID: 'minio-job'
+  restart: unless-stopped
+  networks:
+  - monitoring
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+    interval: 30s
+    timeout: 20s
+    retries: 3
+
 services:
 {% for container in compose['containers'] %}
   {{ container.name }}:
@@ -28,6 +49,32 @@ services:
 {% endfor %}
 {% endif %}
 {% endfor %}
+{% for node in ['1', '2', '3', '4'] %}
+  minio{{ node }}:
+    <<: *minio-common
+    hostname: minio{{ node }}
+    container_name: minio{{ node }}
+    volumes:
+      - data{{ node }}-1:/data1
+      - data{{ node }}-2:/data2
+{% endfor %}
+  minio-nginx:
+    image: nginx:1.23
+    hostname: nginx
+    container_name: minio-nginx
+    volumes:
+      - ./minio/config/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "0.0.0.0:9000:9000"
+      - "0.0.0.0:9001:9001"
+    networks:
+    - monitoring
+    - frontend
+    depends_on:
+      - minio1
+      - minio2
+      - minio3
+      - minio4
 
 networks:
   monitoring:
@@ -38,7 +85,11 @@ networks:
     driver: bridge
 
 volumes:
-    prometheus_data: {}
-    alertmanager: {}
-    loki: {}
-    grafana: {}
+  prometheus_data: {}
+  alertmanager: {}
+  loki: {}
+  grafana: {}
+{% for node in ['1', '2', '3', '4'] %}
+  data{{ node }}-1: {}
+  data{{ node }}-2: {}
+{% endfor %}
