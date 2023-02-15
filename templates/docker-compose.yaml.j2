@@ -4,7 +4,7 @@ version: "{{ compose['compose_file']['composeVersion'] }}"
 x-minio-common: &minio-common
   image: {{ minio_config['image'] }}
   command: server --console-address ":9001" http://minio{1...4}/data{1...2}
-  expose:
+  ports:
     - "127.0.0.1:9000:9000"
     - "127.0.0.1:9001:9001"
   environment:
