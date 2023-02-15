@@ -49,34 +49,15 @@ services:
 {% endfor %}
 {% endif %}
 {% endfor %}
-  minio1:
+{% for node in ['1', '2', '3', '4'] %}
+  minio{{ node }}:
     <<: *minio-common
-    hostname: minio1
-    container_name: minio1
+    hostname: minio{{ node }}
+    container_name: minio{{ node }}
     volumes:
-      - data1-1:/data1
-      - data1-2:/data2
-  minio2:
-    <<: *minio-common
-    hostname: minio2
-    container_name: minio2
-    volumes:
-      - data2-1:/data1
-      - data2-2:/data2
-  minio3:
-    <<: *minio-common
-    hostname: minio3
-    container_name: minio3
-    volumes:
-      - data3-1:/data1
-      - data3-2:/data2
-  minio4:
-    <<: *minio-common
-    hostname: minio4
-    container_name: minio4
-    volumes:
-      - data4-1:/data1
-      - data4-2:/data2
+      - data{{ node }}-1:/data1
+      - data{{ node }}-2:/data2
+{% endfor %}
   minio-nginx:
     image: nginx:1.23
     hostname: nginx
@@ -108,11 +89,7 @@ volumes:
   alertmanager: {}
   loki: {}
   grafana: {}
-  data1-1: {}
-  data1-2: {}
-  data2-1: {}
-  data2-2: {}
-  data3-1: {}
-  data3-2: {}
-  data4-1: {}
-  data4-2: {}
+{% for node in ['1', '2', '3', '4'] %}
+  data{{ node }}-1: {}
+  data{{ node }}-2: {}
+{% endfor %}
