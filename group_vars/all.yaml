@@ -28,6 +28,8 @@ compose:
   - alertmanager
   - grafana
   - nginx
+  - minio
+  - minio/config
   - grafana/config
   - loki/config
   - nginx/config
@@ -148,6 +150,9 @@ compose:
     networks:
       - monitoring
       - frontend
+
+minio_config:
+  image: quay.io/minio/minio:RELEASE.2023-02-10T18-48-39Z
 
 ## Monitoring agent configuration ##
 # Variables for node-exporter and cadvisor
