@@ -118,6 +118,8 @@ compose:
     - '-config.file=/etc/loki/loki.yml'
     networks:
     - monitoring
+    depends_on:
+    - minio-nginx
   - name: promtail
     image: docker.io/grafana/promtail:2.7.3
     volumes:
