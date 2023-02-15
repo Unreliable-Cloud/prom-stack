@@ -47,8 +47,8 @@ storage_config:
 {% if loki_config['object_storage'] == "s3" %}
   aws:
     bucketnames: {{ loki_aws['bucket'] }}
-    endpoint: {{ loki_aws['endpoint'] }}
-    region: {{ loki_aws['region'] }}
+    endpoint: {{ loki_config['endpoint'] }}
+    region: {{ loki_config['region'] }}
     access_key_id: {{ loki_aws['access_key'] }}
     secret_access_key: {{ loki_aws['secret_key'] }}
     insecure: true
