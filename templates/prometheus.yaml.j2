@@ -26,6 +26,7 @@ rule_files:
 ## 2. k8s node exporter and api
 ## 3. hcloud node exporter
 ## 4. Grafana
+## 5. Minio
 scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 10s
@@ -235,4 +236,4 @@ scrape_configs:
     metrics_path: /minio/v2/metrics/cluster
     scheme: http
     static_configs:
-    - targets: ['minio-nginx:9000']
+    - targets: ['nginx:9000']
