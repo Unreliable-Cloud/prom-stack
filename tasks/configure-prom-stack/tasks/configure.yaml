@@ -20,7 +20,7 @@
   - restart-containers
 
 - name: "Copy Nginx config"
-  copy:
+  template:
     src: "{{ item.src }}"
     dest: "{{ homedir }}/{{ compose.compose_basedir }}/minio/config/{{ item.dest }}"
     owner: "{{ docker.user }}"
