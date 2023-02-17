@@ -119,7 +119,7 @@ compose:
     networks:
     - monitoring
     depends_on:
-    - minio-nginx
+    - nginx
   - name: promtail
     image: docker.io/grafana/promtail:2.7.3
     volumes:
@@ -147,6 +147,8 @@ compose:
     image: docker.io/bitnami/nginx:1.23
     ports:
     - "0.0.0.0:80:8080"
+    - "0.0.0.0:9000:9000"
+    - "0.0.0.0:9001:9001"
     volumes:
     - ./nginx/config/nginx_grafana.conf:/opt/bitnami/nginx/conf/server_blocks/nginx_grafana.conf:ro
     networks:

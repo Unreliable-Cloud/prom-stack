@@ -58,23 +58,23 @@ services:
       - data{{ node }}-1:/data1
       - data{{ node }}-2:/data2
 {% endfor %}
-  minio-nginx:
-    image: nginx:1.23
-    hostname: nginx
-    container_name: minio-nginx
-    volumes:
-      - ./minio/config/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "0.0.0.0:9000:9000"
-      - "0.0.0.0:9001:9001"
-    networks:
-    - monitoring
-    - frontend
-    depends_on:
-      - minio1
-      - minio2
-      - minio3
-      - minio4
+#  minio-nginx:
+#    image: nginx:1.23
+#    hostname: nginx
+#    container_name: minio-nginx
+#    volumes:
+#      - ./minio/config/nginx.conf:/etc/nginx/nginx.conf:ro
+#    ports:
+#      - "0.0.0.0:9000:9000"
+#      - "0.0.0.0:9001:9001"
+#    networks:
+#    - monitoring
+#    - frontend
+#    depends_on:
+#      - minio1
+#      - minio2
+#      - minio3
+#      - minio4
 
 networks:
   monitoring:
