@@ -106,8 +106,6 @@ http {
     server {
         listen 8080;
         server_name {{ nginx_config['grafana_hostname'] }};
-        access_log /dev/stdout;
-        error_log /dev/stderr;
 
         location / {
             proxy_read_timeout 1800s;
