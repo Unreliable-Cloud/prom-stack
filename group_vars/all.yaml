@@ -201,7 +201,7 @@ alertmanager_url: alertmanager
 loki_config:
   object_storage: s3
   datadir: '/loki'
-  endpoint: 'minio-nginx:9000'
+  endpoint: 'nginx:9000'
   region: us-east-1
 
 # Global Promtail config
