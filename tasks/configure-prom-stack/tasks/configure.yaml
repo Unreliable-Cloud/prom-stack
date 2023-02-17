@@ -27,7 +27,7 @@
     group: "{{ docker.user }}"
     mode: 0644
   with_items:
-  - { src: 'nginx-grafana.conf', dest: 'nginx.conf' }
+  - { src: 'nginx-grafana.conf.j2', dest: 'nginx.conf' }
   notify:
   - restart-containers
 
