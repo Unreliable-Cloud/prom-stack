@@ -34,8 +34,8 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
         labels:
-          dc: {{ dc }}
-          az: msn-dc1
+          dc: {{ dc | default('local') }}
+          az: {{ az | default('local-az') }}
   - job_name: 'alertmanager'
     scrape_interval: 30s
     scrape_timeout: 5s
@@ -43,8 +43,8 @@ scrape_configs:
     static_configs:
       - targets: ['alertmanager:9093']
         labels:
-          dc: {{ dc }}
-          az: msn-dc1
+          dc: {{ dc | default('local') }}
+          az: {{ az | default('local-az') }}
 {% for job in node_exporter_jobs %}
   - job_name: {{ job.name }}
     static_configs:
@@ -244,6 +244,12 @@ scrape_configs:
     - source_labels: [__meta_hetzner_public_ipv4]
       target_label: __address__
       replacement: "$1:9100"
+    - source_labels: [__meta_hetzner_datacenter]
+      action: replace
+      target_label: az
+    - source_labels: [__meta_hetzner_datacenter_location]
+      action: replace
+      target_label: dc
   - job_name: 'grafana'
     scrape_interval: 30s
     scrape_timeout: 5s
@@ -254,8 +260,8 @@ scrape_configs:
     static_configs:
       - targets: ['grafana:3000']
         labels:
-          dc: {{ dc }}
-          az: msn-dc1
+          dc: {{ dc | default('local') }}
+          az: {{ az | default('local-az') }}
   - job_name: minio-job
     scrape_interval: 30s
     scrape_timeout: 5s
@@ -265,5 +271,5 @@ scrape_configs:
     static_configs:
     - targets: ['nginx:9000']
       labels:
-        dc: {{ dc }}
-        az: msn-dc1
+        dc: {{ dc | default('local') }}
+        az: {{ az | default('local-az') }}

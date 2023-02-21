@@ -11,3 +11,4 @@ promtail_docker=enabled
 promtail_journal=enabled
 loki_url=loki
 dc=msn
+az=msn-dc1
