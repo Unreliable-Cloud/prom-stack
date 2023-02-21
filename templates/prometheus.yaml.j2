@@ -35,14 +35,16 @@ scrape_configs:
       - targets: ['localhost:9090']
         labels:
           dc: {{ dc }}
+          az: msn-dc1
   - job_name: 'alertmanager'
-    scrape_interval: 10s
+    scrape_interval: 30s
     scrape_timeout: 5s
     metrics_path: '/metrics'
     static_configs:
       - targets: ['alertmanager:9093']
         labels:
           dc: {{ dc }}
+          az: msn-dc1
 {% for job in node_exporter_jobs %}
   - job_name: {{ job.name }}
     static_configs:
@@ -61,7 +63,7 @@ scrape_configs:
 {% endfor %}
 {% for job in kubernetes_node_exporter_jobs %}
   - job_name: {{ job.name }}-node
-    scrape_interval: 10s
+    scrape_interval: 30s
     scrape_timeout: 5s
     scheme: https
     tls_config:
@@ -100,6 +102,12 @@ scrape_configs:
       - source_labels: [__meta_kubernetes_pod_node_name]
         action: replace
         target_label: hostname
+      - source_labels: [__meta_kubernetes_node_label_failure_domain_beta_kubernetes_io_region]
+        action: replace
+        target_label: dc
+      - source_labels: [__meta_kubernetes_node_label_failure_domain_beta_kubernetes_io_zone]
+        action: replace
+        target_label: az
     metric_relabel_configs:
       - action: replace
         source_labels: [id]
@@ -109,7 +117,7 @@ scrape_configs:
       - target_label: cluster
         replacement: {{ job.cluster_name }}
   - job_name: {{ job.name }}-service-endpoints
-    scrape_interval: 10s
+    scrape_interval: 30s
     scrape_timeout: 5s
     scheme: https
     tls_config:
@@ -155,11 +163,17 @@ scrape_configs:
     - source_labels: [__meta_kubernetes_pod_node_name]
       action: replace
       target_label: instance
+    - source_labels: [__meta_kubernetes_node_label_failure_domain_beta_kubernetes_io_region]
+      action: replace
+      target_label: dc
+    - source_labels: [__meta_kubernetes_node_label_failure_domain_beta_kubernetes_io_zone]
+      action: replace
+      target_label: az
     metric_relabel_configs:
     - target_label: cluster
       replacement: {{ job.cluster_name }}
   - job_name: {{ job.name }}-pods
-    scrape_interval: 10s
+    scrape_interval: 30s
     scrape_timeout: 5s
     scheme: https
     tls_config:
@@ -209,6 +223,12 @@ scrape_configs:
     - source_labels: [__meta_kubernetes_pod_node_name]
       action: replace
       target_label: instance
+    - source_labels: [__meta_kubernetes_node_label_failure_domain_beta_kubernetes_io_region]
+      action: replace
+      target_label: dc
+    - source_labels: [__meta_kubernetes_node_label_failure_domain_beta_kubernetes_io_zone]
+      action: replace
+      target_label: az
     metric_relabel_configs:
     - target_label: cluster
       replacement: {{ job.cluster_name }}
@@ -235,6 +255,7 @@ scrape_configs:
       - targets: ['grafana:3000']
         labels:
           dc: {{ dc }}
+          az: msn-dc1
   - job_name: minio-job
     scrape_interval: 30s
     scrape_timeout: 5s
@@ -245,3 +266,4 @@ scrape_configs:
     - targets: ['nginx:9000']
       labels:
         dc: {{ dc }}
+        az: msn-dc1
