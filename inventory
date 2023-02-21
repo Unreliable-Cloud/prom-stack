@@ -10,3 +10,4 @@ ansible_user=ubuntu
 promtail_docker=enabled
 promtail_journal=enabled
 loki_url=loki
+dc=msn

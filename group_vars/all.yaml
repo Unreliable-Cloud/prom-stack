@@ -196,7 +196,6 @@ prometheus_config:
     scrape_timeout: 10s
     external_labels:
       env: prod
-      dc: msn
 log_index_retention: 336h
 alertmanager_url: alertmanager
 

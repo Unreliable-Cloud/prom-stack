@@ -33,12 +33,16 @@ scrape_configs:
     scrape_timeout: 5s
     static_configs:
       - targets: ['localhost:9090']
+        labels:
+          dc: {{ dc }}
   - job_name: 'alertmanager'
     scrape_interval: 10s
     scrape_timeout: 5s
     metrics_path: '/metrics'
     static_configs:
       - targets: ['alertmanager:9093']
+        labels:
+          dc: {{ dc }}
 {% for job in node_exporter_jobs %}
   - job_name: {{ job.name }}
     static_configs:
@@ -229,6 +233,8 @@ scrape_configs:
       password: "{{ metrics_user_password }}"
     static_configs:
       - targets: ['grafana:3000']
+        labels:
+          dc: {{ dc }}
   - job_name: minio-job
     scrape_interval: 30s
     scrape_timeout: 5s
@@ -237,3 +243,5 @@ scrape_configs:
     scheme: http
     static_configs:
     - targets: ['nginx:9000']
+      labels:
+        dc: {{ dc }}
