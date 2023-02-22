@@ -9,21 +9,21 @@ groups:
       component: promtail
       type: error
     annotations:
+      title: "Promtail request errors ({{ $labels.job }})"
+      summary: "Promtail is reporting 5xx errors"
       description: |
         Promtail is experiencing issues
         VALUE = {{ $value }}
-        LABELS = {{ $labels }}
-      summary: Promtail request errors (instance {{ $labels.instance }})
   - alert: PromtailRequestLatency
-    expr: histogram_quantile(0.99, sum(rate(promtail_request_duration_seconds_bucket[5m])) by (le)) > 3
+    expr: histogram_quantile(0.99, sum(rate(promtail_request_duration_seconds_bucket[5m])) by (le)) > 5
     for: 5m
     labels:
       severity: warning
       component: promtail
       type: latency
     annotations:
-      summary: Promtail request latency (instance {{ $labels.instance }})
+      title: "Promtail request latency ({{ $labels.job }})"
+      summary: "Promtail is encountering high p99 request latency"
       description: |
         Promtail is experiencing high latency during the last 5 minutes
         VALUE = {{ $value }}
-        LABELS = {{ $labels }}
