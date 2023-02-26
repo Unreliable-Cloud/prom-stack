@@ -246,6 +246,4 @@ nginx_config:
 mimir_config:
   datadir: '/mimir'
   buckets:
-    alertmanager: mimir-alertmanager
-    ruler: mimir-ruler
-    blocks: mimir-blocks
+    name: mimir-datastore
