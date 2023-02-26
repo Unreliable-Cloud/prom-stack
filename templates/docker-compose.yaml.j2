@@ -72,6 +72,7 @@ volumes:
   alertmanager: {}
   loki: {}
   grafana: {}
+  mimir: {}
 {% for node in ['1', '2', '3', '4'] %}
   data{{ node }}-1: {}
   data{{ node }}-2: {}
