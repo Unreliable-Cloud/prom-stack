@@ -30,7 +30,7 @@ common:
 blocks_storage:
   storage_prefix: blocks
   tsdb:
-    dir: /mimir/tsdb
+    dir: {{ mimir_config['datadir'] }}/tsdb
 
 alertmanager_storage:
   storage_prefix: alertmanager
