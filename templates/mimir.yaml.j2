@@ -65,8 +65,6 @@ ingester:
 
 ruler:
   rule_path: {{ mimir_config['datadir'] }}/ruler
-  alertmanager_url: http://alertmanager:9093
 
 alertmanager:
   data_dir: {{ mimir_config['datadir'] }}/alertmanager
-  external_url: http://alertmanager:9093
