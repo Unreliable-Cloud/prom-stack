@@ -168,7 +168,7 @@ compose:
     - ./mimir/config:/etc/mimir
     - mimir:/mimir
     command:
-    - '--config.file=/etc/mimir/mimir.yml'
+    - '-config.file=/etc/mimir/mimir.yml'
     - '-distributor.ingestion-rate-limit=300000'
     - '-distributor.ingestion-burst-size=600000'
     networks:
