@@ -28,6 +28,8 @@ compose:
   - alertmanager
   - grafana
   - nginx
+  - mimir
+  - mimir/config
   - grafana/config
   - loki/config
   - nginx/config
@@ -61,6 +63,7 @@ compose:
     - monitoring
     depends_on:
     - cadvisor
+    - mimir
   - name: cadvisor
     image: gcr.io/cadvisor/cadvisor:v0.47.1
     container_name: cadvisor
@@ -157,6 +160,19 @@ compose:
     networks:
       - monitoring
       - frontend
+  - name: mimir
+    image: docker.io/grafana/mimir:2.6.0
+    ports:
+    - "127.0.0.1:9009:9009"
+    volumes:
+    - ./mimir/config:/etc/mimir
+    - mimir:/mimir
+    command:
+    - '--config.file=/etc/mimir/mimir.yml'
+    - '-distributor.ingestion-rate-limit=300000'
+    - '-distributor.ingestion-burst-size=600000'
+    networks:
+    - monitoring
 
 minio_config:
   image: quay.io/minio/minio:RELEASE.2023-02-10T18-48-39Z
@@ -191,6 +207,7 @@ kubernetes_node_exporter_jobs:
 # Global Prometheus config
 prometheus_config:
   global:
+    mimir: enabled
     scrape_interval: 10s
     evaluation_interval: 30s
     scrape_timeout: 10s
@@ -225,3 +242,10 @@ grafana_config:
 # Nginx config
 nginx_config:
   grafana_hostname: 'grafana.donthurt.us'
+
+mimir_config:
+  datadir: '/mimir'
+  buckets:
+    alertmanager: mimir-alertmanager
+    ruler: mimir-ruler
+    blocks: mimir-blocks

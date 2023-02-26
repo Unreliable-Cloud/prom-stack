@@ -43,6 +43,18 @@
   notify:
   - restart-containers
 
+- name: "Copy Mimir config"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ homedir }}/{{ compose.compose_basedir }}/mimir/config/{{ item.dest }}"
+    owner: "{{ docker.user }}"
+    group: "{{ docker.user }}"
+    mode: 0644
+  with_items:
+  - { src: 'mimir.yaml.j2', dest: 'mimir.yml' }
+  notify:
+  - restart-containers
+
 - name: "Copy Promtail config"
   template:
     src: "{{ item.src }}"
