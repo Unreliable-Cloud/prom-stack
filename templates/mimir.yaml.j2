@@ -61,10 +61,3 @@ ingester:
     kvstore:
       store: memberlist
     replication_factor: 1
-
-
-ruler:
-  rule_path: {{ mimir_config['datadir'] }}/ruler
-
-alertmanager:
-  data_dir: {{ mimir_config['datadir'] }}/alertmanager
