@@ -13,8 +13,6 @@ global:
 {% if prometheus_config['global']['mimir'] == "enabled" %}
 remote_write:
 - url: http://mimir:9009/api/v1/push
-  headers:
-    "X-Scope-OrgID": "unreliable-cloud"
 {% endif %}
 
 # Alertmanager configuration
