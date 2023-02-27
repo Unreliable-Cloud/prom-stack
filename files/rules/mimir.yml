@@ -1,0 +1,80 @@
+groups:
+- name: mimir_compactor
+  rules:
+  - alert: MimirCompactorHasNotUploadedBlocks
+    expr: |
+      (max by(dc, env, instance) (thanos_objstore_bucket_last_successful_upload_time{component="compactor"}) == 0)
+      and
+      (sum by(dc, env, instance) (rate(cortex_compactor_group_compaction_runs_started_total[24h])) > 0)
+    for: 24h
+    labels:
+      reason: upload-failures
+      severity: critical
+      component: mimir
+      type: error
+    annotations:
+      summary: "Mimir Compactor failed to upload blocks"
+      description: |
+        Mimir Compactor {{ $labels.instance }} in {{ $labels.env }}/{{ $labels.dc}} has not uploaded any block in the last 24 hours.
+      runbook_url: https://grafana.com/docs/mimir/latest/operators-guide/mimir-runbooks/#mimircompactorhasnotuploadedblocks
+  - alert: MimirCompactorHasNotSuccessfullyRunCompaction
+    expr: increase(cortex_compactor_runs_failed_total{reason!="shutdown"}[2h]) >= 2
+    labels:
+      reason: consecutive-failures
+      severity: critical
+      component: mimir
+      type: error
+    annotations:
+      summary: "Mimir Compactor failed to run compaction"
+      description: |
+        Mimir Compactor {{ $labels.instance }} in {{ $labels.env }}/{{ $labels.dc}} failed to run 2 consecutive compactions.
+      runbook_url: https://grafana.com/docs/mimir/latest/operators-guide/mimir-runbooks/#mimircompactorhasnotsuccessfullyruncompaction
+  - alert: MimirCompactorHasNotSuccessfullyCleanedUpBlocks
+    expr: |
+      (time() - cortex_compactor_block_cleanup_last_successful_run_timestamp_seconds > 60 * 60 * 6)
+    for: 1h
+    labels:
+      severity: critical
+      component: mimir
+      type: error
+    annotations:
+      summary: "Mimir Compactor failed to clean up blocks"
+      description: |
+        Mimir Compactor {{ $labels.instance }} in {{ $labels.env }}/{{ $labels.dc}} has not successfully cleaned up blocks in the last 6 hours.
+      runbook_url: https://grafana.com/docs/mimir/latest/operators-guide/mimir-runbooks/#mimircompactorhasnotsuccessfullycleanedupblocks
+
+- name: mimir_ingester
+  rules:
+  - alert: MimirIngesterUnhealthy
+    expr: |
+      min by (dc, env, instance) (cortex_ring_members{state="Unhealthy", name="ingester"}) > 0
+    for: 15m
+    labels:
+      severity: critical
+      component: mimir
+      type: error
+    annotations:
+      summary: "Mimir Ingester is Unhealthy"
+      description: |
+        Mimir instance {{ $labels.instance }} in {{ $labels.env }}/{{ $labels.dc }} has {{printf "%f" $value }} unhealthy ingester(s).
+      runbook_url: https://grafana.com/docs/mimir/latest/operators-guide/mimir-runbooks/#mimiringesterunhealthy
+
+- name: mimir_alerts
+  rules:
+  - alert: MimirRequestErrors
+    expr: |
+      100 * sum by (dc, env, instance, job, route) (rate(cortex_request_duration_seconds_count{status_code=~"5..",route!~"ready"}[1m]))
+        /
+      sum by (dc, env, instance, job, route) (rate(cortex_request_duration_seconds_count{route!~"ready"}[1m]))
+        > 1
+    for: 15m
+    labels:
+      reason: consecutive-failures
+      severity: critical
+      component: mimir
+      type: error
+    annotations:
+      summary: "Mimir has detected a high rate of request errors"
+      description: |
+        The route {{ $labels.route }} on {{ $labels.instance }} in {{ $labels.env }}/{{ $labels.dc }} is experiencing {{ printf "%.2f" $value }}% errors.
+      runbook_url: https://grafana.com/docs/mimir/latest/operators-guide/mimir-runbooks/#mimirrequesterrors
