@@ -206,6 +206,21 @@ kubernetes_node_exporter_jobs:
   cert_prefix: k8s
   cluster_name: k8s-us-east-1
 
+# Variables for weather API scraping
+weather_jobs:
+- name: madison
+  endpoint: '/weather/53716'
+  dc: ash
+  az: ash-dc1
+- name: orlando
+  endpoint: '/weather/32789'
+  dc: ash
+  az: ash-dc1
+- name: sarasota
+  endpoint: '/weather/34230'
+  dc: ash
+  az: ash-dc1
+
 # Global Prometheus config
 prometheus_config:
   global:
