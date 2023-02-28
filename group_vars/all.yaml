@@ -220,6 +220,14 @@ weather_jobs:
   endpoint: '/weather/34230'
   dc: ash
   az: ash-dc1
+- name: seward
+  endpoint: '/weather/99664'
+  dc: ash
+  az: ash-dc1
+- name: sandiego
+  endpoint: '/weather/92117'
+  dc: ash
+  az: ash-dc1
 
 # Global Prometheus config
 prometheus_config:

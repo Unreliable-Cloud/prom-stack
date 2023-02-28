@@ -291,7 +291,7 @@ scrape_configs:
         az: {{ az | default('local-az') }}
 {% for job in weather_jobs %}
   - job_name: {{ job.name }}-wapi-job
-    scrape_interval: 10m
+    scrape_interval: 5m
     scrape_timeout: 10s
     scheme: https
     metrics_path: {{ job.endpoint }}
