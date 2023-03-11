@@ -202,7 +202,7 @@ kubernetes_node_exporter_jobs:
   cert_prefix: k0s
   cluster_name: k0s-rpi
 - name: k8s-us-east-1
-  api_server: '5.161.160.176:443'
+  api_server: '5.161.161.78:6443'
   cert_prefix: k8s
   cluster_name: k8s-us-east-1
 
