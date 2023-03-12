@@ -274,4 +274,4 @@ mimir_config:
     name: mimir-datastore
   retention: 1y
   max_labels: 1000
-  max_series: 1500000
+  max_series: 150000000
